@@ -98,6 +98,28 @@ kakaotalk
 
 Application Finder -> Search KakaoTalk (카카오톡) -> Open
 
+## Display Scaling (화면 배율)
+
+`kakaotalk` detects the display scale on every launch and applies it as the Wine DPI.
+With the default Wine X11 driver (also on XWayland) it follows the `Xft.dpi` X resource, which is read with `xrdb` (or `xprop` as a fallback).
+With the Wine Wayland driver it follows the compositor scale (GNOME, KDE Plasma, Hyprland, Sway).
+You can override it with environment variables:
+
+`kakaotalk`은 실행할 때마다 화면 배율을 감지해 Wine DPI로 적용합니다.
+기본 Wine X11 드라이버(XWayland 포함)에서는 `xrdb`(없으면 `xprop`)로 읽은 `Xft.dpi` 값을, Wine Wayland 드라이버에서는 컴포지터 배율(GNOME, KDE Plasma, Hyprland, Sway)을 따릅니다.
+아래 환경 변수로 직접 조절할 수 있습니다:
+
+```bash
+# Use a fixed DPI (96 = 100%, 120 = 125%, 144 = 150%, 192 = 200%)
+KAKAOTALK_DPI=144 kakaotalk
+
+# Scale the detected DPI (e.g. 10% larger)
+KAKAOTALK_DPI_SCALE=1.1 kakaotalk
+
+# Keep the DPI configured with `winecfg`
+KAKAOTALK_DPI=off kakaotalk
+```
+
 ## Uninstallation (삭제법)
 
 ### KakaoTalk (카카오톡)
