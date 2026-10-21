@@ -119,6 +119,9 @@ function _detect_xft_dpi() {
                 | head -n1 \
                 || true
         )"
+    else
+        echo 'Neither xrdb nor xprop is installed, so the X11 display scale cannot be detected.' >&2
+        echo 'Install xrdb (Arch: xorg-xrdb, Debian/Ubuntu: x11-xserver-utils) for HiDPI support.' >&2
     fi
     printf '%s' "${dpi%.*}"
 }

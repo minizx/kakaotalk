@@ -33,6 +33,11 @@ For multimedia playback support, also install the following optional dependencie
 - gst-plugins-good
 - gst-plugins-bad
 
+To detect the display scale (HiDPI) with the Wine X11 driver, also install `xrdb` (Arch Linux: `xorg-xrdb`, Debian / Ubuntu: `x11-xserver-utils`):  
+고해상도(HiDPI) 화면 배율을 자동으로 맞추려면 `xrdb`도 설치하세요 (아치리눅스: `xorg-xrdb`, 데비안 / 우분투: `x11-xserver-utils`):
+
+- xrdb
+
 ### Arch Linux (아치리눅스)
 
 ```bash
