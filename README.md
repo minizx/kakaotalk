@@ -26,6 +26,7 @@ yay -S --needed kakaotalk && kakaotalk
 - wine >= 11.0
 - winetricks
 - xdg-utils
+- xrdb
 
 For multimedia playback support, also install the following optional dependencies:  
 동영상 재생 등의 기능을 이용하시려면 아래 패키지도 추가로 설치하세요:
@@ -33,22 +34,17 @@ For multimedia playback support, also install the following optional dependencie
 - gst-plugins-good
 - gst-plugins-bad
 
-To detect the display scale (HiDPI) with the Wine X11 driver, also install `xrdb` (Arch Linux: `xorg-xrdb`, Debian / Ubuntu: `x11-xserver-utils`):  
-고해상도(HiDPI) 화면 배율을 자동으로 맞추려면 `xrdb`도 설치하세요 (아치리눅스: `xorg-xrdb`, 데비안 / 우분투: `x11-xserver-utils`):
-
-- xrdb
-
 ### Arch Linux (아치리눅스)
 
 ```bash
-sudo pacman -S bash curl desktop-file-utils wine xdg-utils
+sudo pacman -S bash curl desktop-file-utils wine xdg-utils xorg-xrdb
 ```
 
 ### Debian / Ubuntu (데비안 / 우분투)
 
 ```bash
 sudo apt-get update
-sudo apt-get install bash curl desktop-file-utils wine xdg-utils
+sudo apt-get install bash curl desktop-file-utils wine xdg-utils x11-xserver-utils
 ```
 
 ## Installation (설치하기)
