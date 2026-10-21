@@ -120,6 +120,10 @@ KAKAOTALK_DPI_SCALE=1.1 kakaotalk
 KAKAOTALK_DPI=off kakaotalk
 ```
 
+When the DPI changes, the saved main window size is reset so that KakaoTalk does not open larger than the screen.
+
+DPI가 바뀌면 카카오톡 창이 화면보다 크게 열리지 않도록 저장된 메인 창 크기를 초기화합니다.
+
 ## Uninstallation (삭제법)
 
 ### KakaoTalk (카카오톡)

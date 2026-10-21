@@ -249,6 +249,25 @@ function _detect_host_dpi() {
     fi
 }
 
+# Forget the main window geometry KakaoTalk saved at the previous DPI.
+# KakaoTalk restores it scaled by the new DPI, so after a DPI increase the
+# window can open larger than the screen; the window manager then shrinks it
+# and Wine loses track of the real geometry, which breaks clicks and resizing.
+# KakaoTalk falls back to its default size when the entry is missing.
+# Skipped while KakaoTalk is running, since it rewrites the file on exit.
+function _reset_window_geometry() {
+    local pref=''
+
+    if pgrep -u "${UID}" -x 'KakaoTalk[.]exe' >/dev/null 2>&1; then
+        return
+    fi
+    for pref in "${WINEPREFIX}"/drive_c/users/*/AppData/Local/Kakao/KakaoTalk/users/*/user_pref.ini; do
+        if [ -f "${pref}" ] && grep -q '^main_wnd_last_pos_v2 = ' "${pref}"; then
+            sed -i '/^main_wnd_last_pos_v2 = /d' "${pref}" || true
+        fi
+    done
+}
+
 # Print the DPI currently stored in the Wine registry, or nothing.
 function _get_wine_dpi() {
     local hex=''
@@ -282,7 +301,9 @@ function _patch_wine() {
     #   KAKAOTALK_DPI=off         keep the DPI configured in winecfg
     #   KAKAOTALK_DPI_SCALE=<f>   multiply the detected DPI (default 1.0)
     #
-    # When detection fails, the registry is left untouched.
+    # When detection fails, the registry is left untouched. When the DPI
+    # changes, the saved main window geometry is reset (see
+    # _reset_window_geometry).
     host_dpi=''
     case "${KAKAOTALK_DPI:-auto}" in
     off)
@@ -303,8 +324,12 @@ function _patch_wine() {
         if printf '%s' "${host_dpi}" | grep -qE '^[0-9]+$' \
             && [ "${host_dpi}" -ge 48 ] && [ "${host_dpi}" -le 480 ]; then
             echo "-> Applied DPI: ${host_dpi}"
-            if [ "$(_get_wine_dpi)" != "${host_dpi}" ]; then
+            prev_dpi="$(_get_wine_dpi)"
+            if [ "${prev_dpi}" != "${host_dpi}" ]; then
                 wine reg add 'HKEY_CURRENT_USER\Control Panel\Desktop' /v LogPixels /t REG_DWORD /d "${host_dpi}" /f >/dev/null 2>&1 || true
+                if [ -n "${prev_dpi}" ]; then
+                    _reset_window_geometry
+                fi
             fi
         else
             echo "-> Ignoring invalid DPI: ${host_dpi} (expected 48-480)" >&2
